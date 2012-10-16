@@ -72,22 +72,20 @@ function getFragment(endpoint, done) {
     // Collect all incoming data into a single big string.
     var body = '';
     var abort = false;
-    var checked_for_duplicate = false;
+    var image_id, fragment_id;
 
     response.on('data', function (chunk) {
       body += chunk;
       stats.bytesReceived += chunk.length;
 
-      var image_id    = (body.match(/"image_id":\s*(\d+)\s*[,}]/)    || []).pop();
-      var fragment_id = (body.match(/"fragment_id":\s*(\d+)\s*[,}]/) || []).pop();
+      image_id    = image_id    || (body.match(/"image_id":\s*(\d+)\s*[,}]/)    || []).pop();
+      fragment_id = fragment_id || (body.match(/"fragment_id":\s*(\d+)\s*[,}]/) || []).pop();
 
-      if (fragment_id && image_id && !checked_for_duplicate) {
-        if (isReceived({ image_id:image_id, fragment_id: fragment_id})) {
+      if (fragment_id && image_id) {
+        if (isReceived({ image_id: image_id, fragment_id: fragment_id})) {
           stats.duplicates++;
           abort = true;
           request.abort();
-        } else {
-          checked_for_duplicate = true;
         }
       }
     });
