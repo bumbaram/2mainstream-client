@@ -72,11 +72,12 @@ function getFragment(endpoint, done) {
     // Collect all incoming data into a single big string.
     var body = '';
     var abort = false;
-    var image_id;
-    var fragment_id;
     var checked_for_duplicate = false;
 
     response.on('data', function (chunk) {
+      var image_id;
+      var fragment_id;
+
       body += chunk;
       stats.bytesReceived += chunk.length;
 
