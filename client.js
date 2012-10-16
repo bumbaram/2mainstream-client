@@ -78,8 +78,8 @@ function getFragment(endpoint, done) {
       body += chunk;
       stats.bytesReceived += chunk.length;
 
-      image_id    = image_id    || (body.match(/"image_id":\s*(\d+)\s*[,}]/)    || []).pop();
-      fragment_id = fragment_id || (body.match(/"fragment_id":\s*(\d+)\s*[,}]/) || []).pop();
+      image_id    = image_id    || (body.match(/"image_id"\s*:\s*(\d+)\s*[,}]/)    || []).pop();
+      fragment_id = fragment_id || (body.match(/"fragment_id"\s*:\s*(\d+)\s*[,}]/) || []).pop();
 
       if (fragment_id && image_id) {
         if (isReceived({ image_id: image_id, fragment_id: fragment_id})) {
