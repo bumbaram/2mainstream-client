@@ -75,20 +75,11 @@ function getFragment(endpoint, done) {
     var checked_for_duplicate = false;
 
     response.on('data', function (chunk) {
-      var image_id;
-      var fragment_id;
-
       body += chunk;
       stats.bytesReceived += chunk.length;
 
-      var matchRes = body.toString().match(/\"image_id\":\s*(\d+)\s*[,\}]/i);
-      if (matchRes !== null) {
-        image_id = matchRes[1];
-      }
-      var matchRes = body.toString().match(/\"fragment_id\":\s*(\d+)\s*[,\}]/i);
-      if (matchRes !== null) {
-        fragment_id = matchRes[1];
-      }
+      var image_id    = (body.match(/"image_id":\s*(\d+)\s*[,}]/)    || []).pop();
+      var fragment_id = (body.match(/"fragment_id":\s*(\d+)\s*[,}]/) || []).pop();
 
       if (fragment_id && image_id && !checked_for_duplicate) {
         if (isReceived({ image_id:image_id, fragment_id: fragment_id})) {
